@@ -24,7 +24,7 @@ void sieve(int n)
         }
     }
 }
-
+ 
 bool good(int k,vector<int> & ar)
 {
     int N = ar.size();

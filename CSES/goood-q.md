@@ -7,6 +7,7 @@
 ## Sorting and Searching
 
 - Apartments
+- Missing Coin Sum
 
 ## Dynamic Programming
 
@@ -24,3 +25,4 @@
 ## Trees
 
 - Tree Matching
+- Tree Distances 1
