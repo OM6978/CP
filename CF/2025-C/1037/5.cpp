@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
+
 void solve()
 {
-    int N,X;
-    cin>>N>>X;
+    int N;
+    cin>>N;
 
     vector<int> ar(N);
     for(int i=0;i<N;i++)
@@ -18,19 +20,26 @@ void solve()
         cin>>br[i];
     }
 
-    vector<vector<int>> dp(N+1,vector<int> (X+1,0));
-
-    for(int i=N-1;i>=0;i--)
+    vector<int> gar;
+    for(int i=0;i<N;i++)
     {
-        for(int cost=0;cost<=X;cost++)
+        int lcm = ar[i]*br[i] / __gcd(ar[i],br[i]);
+        gar.push_back(lcm);
+    }
+
+    int pref = 0,suff = 0;
+    for(int i=0;i<N;i++)
+    {
+        pref = __gcd(pref,gar[i]);
+        suff = __gcd(suff,gar[N-i-1]);
+        if(pref != ar[i] || suff != br[N-i-1])
         {
-            dp[i][cost] = dp[i+1][cost];
-            if(cost + ar[i] <= X)
-                dp[i][cost] = max(dp[i][cost],dp[i+1][cost+ar[i]] + br[i]);
+            cout << "NO\n";
+            return;
         }
     }
 
-    cout << dp[0][0] << '\n';
+    cout << "YES\n";
 }
 
 signed main()
@@ -43,7 +52,9 @@ signed main()
     ios_base::sync_with_stdio(0);
     cin.tie(NULL);cout.tie(NULL);
     
-    solve();
-
+    int Testcases;
+    cin>>Testcases;
+    while(Testcases--)solve();
+    
     return 0;
 }

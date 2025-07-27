@@ -6,31 +6,33 @@ void solve()
     int N,X;
     cin>>N>>X;
 
-    vector<int> ar(N);
+    vector<pair<int,int>> ar(N);
     for(int i=0;i<N;i++)
     {
-        cin>>ar[i];
+        int val;
+        cin>>val;
+
+        ar[i] = {val,i};
     }
 
-    vector<int> br(N);
-    for(int i=0;i<N;i++)
-    {
-        cin>>br[i];
-    }
+    sort(ar.begin(),ar.end());
 
-    vector<vector<int>> dp(N+1,vector<int> (X+1,0));
-
-    for(int i=N-1;i>=0;i--)
+    int l = 0,r = N-1;
+    while(l<r)
     {
-        for(int cost=0;cost<=X;cost++)
+        if(ar[l].first + ar[r].first == X)
         {
-            dp[i][cost] = dp[i+1][cost];
-            if(cost + ar[i] <= X)
-                dp[i][cost] = max(dp[i][cost],dp[i+1][cost+ar[i]] + br[i]);
+            cout << ar[l].second + 1 << ' ' << ar[r].second + 1 << '\n';
+            return;
         }
+        else if(ar[l].first + ar[r].first > X)
+        {
+            r--;
+        }
+        else l++;
     }
 
-    cout << dp[0][0] << '\n';
+    cout << "IMPOSSIBLE\n";
 }
 
 signed main()

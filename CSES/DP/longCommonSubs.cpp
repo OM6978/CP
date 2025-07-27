@@ -1,50 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-tuple<int,int,int> solvedp(int i,int j,vector<int> & ar,vector<int> & br,vector<vector<pair<int,int>>> & par,vector<vector<int>> & dp)
-{
-    int N = dp.size(),M = dp[0].size();
-
-    if(i==N || j==M)return {0,-1,-1};
-    if(dp[i][j]!=-1)
-    {
-        if(ar[i] == br[j])
-        {
-            return {dp[i][j],i,j};
-        }
-        else return {dp[i][j],par[i][j].first,par[i][j].second};
-    }
-
-    if(ar[i] == br[j])
-    {
-        auto [val,x,y] = solvedp(i+1,j+1,ar,br,par,dp);
-        par[i][j] = {x,y};
-        dp[i][j] = val+1;
-
-        return {dp[i][j],i,j};
-    }
-
-    auto [val1,x1,y1] = solvedp(i+1,j,ar,br,par,dp);
-    auto [val2,x2,y2] = solvedp(i,j+1,ar,br,par,dp);
-
-    int val;
-    pair<int,int> parent;
-    if(val1 > val2)
-    {
-        val = val1;
-        parent = {x1,y1};
-    }
-    else
-    {
-        val = val2;
-        parent = {x2,y2};
-    }
-
-    par[i][j] = parent;
-
-    return {dp[i][j] = val,parent.first,parent.second};
-}
-
 void solve()
 {
     int N,M;
@@ -62,31 +18,42 @@ void solve()
         cin>>br[i];
     }
 
-    vector<vector<int>> dp(N,vector<int> (M,-1));
-    vector<vector<pair<int,int>>> par(N,vector<pair<int,int>> (M,{-1,-1}));
+    vector<vector<int>> dp(N+1,vector<int> (M+1,0));
+    vector<vector<pair<int,int>>> par(N+1,vector<pair<int,int>> (M+1,{-1,-1}));
 
-    auto [num,x,y] = solvedp(0,0,ar,br,par,dp);
-    cout << num << '\n';
-
-    if(num == 0)return;
-
-    int currx,curry;
-    if(ar[0] == br[0])currx = 0,curry = 0;
-    else
+    for(int i=N-1;i>=0;i--)
     {
-        auto p = par[0][0];
-        currx = p.first;
-        curry = p.second;
+        for(int j=M-1;j>=0;j--)
+        {
+            if(ar[i] == br[j])
+            {
+                dp[i][j] = dp[i+1][j+1] + 1;
+                par[i][j] = {i,j};
+            }
+            else
+            {
+                dp[i][j] = dp[i][j+1];
+
+                if(dp[i+1][j] > dp[i][j])par[i][j] = par[i+1][j];
+                else par[i][j] = par[i][j+1];
+
+                dp[i][j] = max(dp[i][j],dp[i+1][j]);
+            }
+        }
     }
 
-    while(1)
+    vector<int> ans;
+    pair<int,int> curr = par[0][0];
+    while(curr!=make_pair(-1,-1))
     {
-        cout << ar[currx] << ' ';
-        auto p = par[currx][curry];
-        currx = p.first;
-        curry = p.second;
+        ans.push_back(ar[curr.first]);
+        curr = par[curr.first+1][curr.second+1];
+    }
 
-        if(currx == -1)break;
+    cout << dp[0][0] << '\n';
+    for(int a : ans)
+    {
+        cout << a << ' ';
     }
     cout << '\n';
 }
@@ -94,8 +61,8 @@ void solve()
 signed main()
 {
     #ifndef ONLINE_JUDGE
-        freopen("/home/om/Acads/Codeforces-Contests/input.txt", "r", stdin);
-        freopen("/home/om/Acads/Codeforces-Contests/output.txt", "w", stdout);
+        freopen("/home/om/Acads/CP/input.txt", "r", stdin);
+        freopen("/home/om/Acads/CP/output.txt", "w", stdout);
     #endif
 
     ios_base::sync_with_stdio(0);

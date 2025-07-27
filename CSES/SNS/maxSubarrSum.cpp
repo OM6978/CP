@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
+
 void solve()
 {
-    int N,X;
-    cin>>N>>X;
+    int N;
+    cin>>N;
 
     vector<int> ar(N);
     for(int i=0;i<N;i++)
@@ -12,25 +14,16 @@ void solve()
         cin>>ar[i];
     }
 
-    vector<int> br(N);
-    for(int i=0;i<N;i++)
+    int most = ar[0];
+    int sum = max(0LL,ar[0]);
+    for(int i=1;i<N;i++)
     {
-        cin>>br[i];
+        sum += ar[i];
+        most = max(sum,most);
+        sum = max(0LL,sum);
     }
 
-    vector<vector<int>> dp(N+1,vector<int> (X+1,0));
-
-    for(int i=N-1;i>=0;i--)
-    {
-        for(int cost=0;cost<=X;cost++)
-        {
-            dp[i][cost] = dp[i+1][cost];
-            if(cost + ar[i] <= X)
-                dp[i][cost] = max(dp[i][cost],dp[i+1][cost+ar[i]] + br[i]);
-        }
-    }
-
-    cout << dp[0][0] << '\n';
+    cout << most << '\n';
 }
 
 signed main()

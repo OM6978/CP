@@ -1,6 +1,14 @@
 {
     "files.associations": {
         "iostream": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "chrono": "cpp",
+        "span": "cpp",
+        "flat_map": "cpp",
+        "flat_set": "cpp",
+        "deque": "cpp",
+        "string": "cpp",
+        "vector": "cpp",
+        "numbers": "cpp"
     }
 }

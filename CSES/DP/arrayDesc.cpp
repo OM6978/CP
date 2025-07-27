@@ -1,37 +1,9 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-#define int long long
+#define int long long 
 
 int MOD = 1e9 + 7;
-
-int solvedp(int in,int val,vector<int> & ar,vector<vector<int>> & dp)
-{
-    int N = dp.size(),M = dp[0].size()-1;
-    if(val > M || val < 1)return 0;
-    if(in == N-1)return 1;
-    if(dp[in][val]!=-1)return dp[in][val];
-
-    if(ar[in+1] != 0)
-    {
-        if(abs(ar[in+1] - val) > 1)
-        {
-            return dp[in][val] = 0;
-        }
-        else
-        {
-            return dp[in][val] = solvedp(in+1,ar[in+1],ar,dp);
-        }
-    }
-
-    int ans = 0;
-
-    ans = (ans + solvedp(in+1,val-1,ar,dp))%MOD;
-    ans = (ans + solvedp(in+1,val,ar,dp))%MOD;
-    ans = (ans + solvedp(in+1,val+1,ar,dp))%MOD;
-
-    return dp[in][val] = ans;
-}
 
 void solve()
 {
@@ -44,19 +16,34 @@ void solve()
         cin>>ar[i];
     }
 
-    vector<vector<int>> dp(N,vector<int> (M+1,-1));
+    vector<vector<int>> dp(N,vector<int> (M+1,0));
 
-    int ans = 0;
-    if(ar[0] == 0)
+    for(int i=1;i<=M;i++)
     {
-        for(int i=1;i<=M;i++)
+        dp[0][i] = (ar[0] == 0 || i==ar[0]);
+    }
+
+    for(int i=1;i<N;i++)
+    {
+        for(int val=1;val<=M;val++)
         {
-            ans = (ans + solvedp(0,i,ar,dp))%MOD;
+            if(ar[i] == val || ar[i] == 0)
+            {
+                dp[i][val] = dp[i-1][val];
+                if(val - 1 >= 1)
+                    dp[i][val] += dp[i-1][val-1];
+                if(val + 1 <= M)
+                    dp[i][val] += dp[i-1][val+1];
+
+                dp[i][val] %= MOD;
+            }
         }
     }
-    else
+
+    int ans = 0;
+    for(int i=1;i<=M;i++)
     {
-        ans = solvedp(0,ar[0],ar,dp);
+        ans = (ans + dp[N-1][i])%MOD;
     }
 
     cout << ans << '\n';
@@ -65,8 +52,8 @@ void solve()
 signed main()
 {
     #ifndef ONLINE_JUDGE
-        freopen("/home/om/Acads/Codeforces-Contests/input.txt", "r", stdin);
-        freopen("/home/om/Acads/Codeforces-Contests/output.txt", "w", stdout);
+        freopen("/home/om/Acads/CP/input.txt", "r", stdin);
+        freopen("/home/om/Acads/CP/output.txt", "w", stdout);
     #endif
 
     ios_base::sync_with_stdio(0);

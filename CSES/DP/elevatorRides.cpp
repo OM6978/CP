@@ -12,25 +12,34 @@ void solve()
         cin>>ar[i];
     }
 
-    vector<int> br(N);
+    vector<int> conts;
+    sort(ar.begin(),ar.end(),greater<int>());
+
     for(int i=0;i<N;i++)
     {
-        cin>>br[i];
-    }
-
-    vector<vector<int>> dp(N+1,vector<int> (X+1,0));
-
-    for(int i=N-1;i>=0;i--)
-    {
-        for(int cost=0;cost<=X;cost++)
+        int flag = 0;
+        for(int & cont : conts)
         {
-            dp[i][cost] = dp[i+1][cost];
-            if(cost + ar[i] <= X)
-                dp[i][cost] = max(dp[i][cost],dp[i+1][cost+ar[i]] + br[i]);
+            if(cont + ar[i] <= X)
+            {
+                flag = 1;
+                cont += ar[i];
+                break;
+            }
+        }
+
+        if(flag==0)
+        {
+            conts.push_back(ar[i]);
         }
     }
 
-    cout << dp[0][0] << '\n';
+    cout << conts.size() << '\n';
+    for(int cont : conts)
+    {
+        cout << cont << ' ';
+    }
+    cout << '\n';
 }
 
 signed main()
