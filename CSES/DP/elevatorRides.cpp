@@ -1,6 +1,8 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define int long long
+
 void solve()
 {
     int N,X;
@@ -12,34 +14,32 @@ void solve()
         cin>>ar[i];
     }
 
-    vector<int> conts;
-    sort(ar.begin(),ar.end(),greater<int>());
-
-    for(int i=0;i<N;i++)
+    vector<pair<int,int>> dp((1<<N),{1e14,1e14});
+    dp[0] = {0,0};
+    for(int take = 0;take < (1<<N);take++)
     {
-        int flag = 0;
-        for(int & cont : conts)
+        for(int i=0;i<N;i++)
         {
-            if(cont + ar[i] <= X)
+            int dpin = (1<<i);
+            if(take & dpin)
             {
-                flag = 1;
-                cont += ar[i];
-                break;
+                auto [cans,last] = dp[take^dpin];
+                if(last + ar[i] <= X)
+                {
+                    last += ar[i];
+                }
+                else
+                {
+                    cans++;
+                    last = ar[i];
+                }
+
+                dp[take] = min(dp[take],{cans,last});
             }
         }
-
-        if(flag==0)
-        {
-            conts.push_back(ar[i]);
-        }
     }
 
-    cout << conts.size() << '\n';
-    for(int cont : conts)
-    {
-        cout << cont << ' ';
-    }
-    cout << '\n';
+    cout << dp[(1<<N) - 1].first + (dp[(1<<N) - 1].second > 0) << '\n';
 }
 
 signed main()

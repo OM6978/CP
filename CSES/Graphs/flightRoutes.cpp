@@ -3,45 +3,6 @@ using namespace std;
 
 #define int long long
 
-void dfs(int node,int sum,vector<vector<pair<int,int>>> & adj,vector<int> &ans,multiset<pair<int,int>> &s,int* vis)
-{
-    for(auto &v : adj[node])
-    {
-        if(vis[v.first] == 0)
-        {
-            s.insert({v.second + sum,v.first});
-        }
-        ans[v.first] = min(v.second + sum,ans[v.first]);
-    }
-    
-    vis[node] = 1;
-    
-    while(s.size() && vis[(*s.begin()).second]==1)
-    {
-        s.erase(s.begin());
-    }
-    
-    if(s.size())
-    {
-        dfs((*s.begin()).second,(*s.begin()).first,adj,ans,s,vis);
-    }
-}
-
-vector<int> dijkstra(int V, vector<vector<pair<int,int>>> adj, int S)
-{
-    vector<int> ans(V+1,(int)1e15);
-    
-    multiset<pair<int,int>> s;
-    
-    int vis[V+1];
-    for(int i=1;i<=V;i++)vis[i] = 0;
-
-    ans[S] = 0;
-    dfs(S,0,adj,ans,s,vis);
-    
-    return ans;
-}
-
 void solve()
 {
     int N,M,K;
@@ -55,12 +16,42 @@ void solve()
         cin>>u>>v>>c;
     
         graph[u].push_back({v,c});
-        graph[v].push_back({u,c});
     }
 
-    auto v = dijkstra(N,graph,1);
+    multiset<pair<int,int>> ms;
+    ms.insert({0,1});
 
-    
+    vector<int> cnt(N+1);
+    vector<int> ans;
+
+    while(ms.size())
+    {
+        auto [price,u] = *ms.begin();
+        ms.erase(ms.begin());
+
+        cnt[u]++;
+
+        if(cnt[u] <= K)
+        {
+            for(auto [v,c] : graph[u])
+            {
+                if(cnt[v] <= K)
+                    ms.insert({price + c,v});
+            }
+        }
+
+        if(u == N)
+        {
+            ans.push_back(price);
+            if(ans.size() == K)break;
+        }
+    }
+
+    for(int a : ans)
+    {
+        cout << a << ' ';
+    }
+    cout << '\n';
 }
 
 signed main()

@@ -74,8 +74,8 @@ void solve()
 signed main()
 {
     #ifndef ONLINE_JUDGE
-        freopen("/home/Om/Acads/Codeforces-Contests/input.txt", "r", stdin);
-        freopen("/home/Om/Acads/Codeforces-Contests/output.txt", "w", stdout);
+        freopen("/home/om/Acads/CP/input.txt", "r", stdin);
+        freopen("/home/om/Acads/CP/output.txt", "w", stdout);
     #endif
 
     ios_base::sync_with_stdio(0);

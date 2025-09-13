@@ -14,6 +14,7 @@
 - Longest Common Subsequence
 - Projects
 - Elevator Rides
+- Counting Numbers
 
 ## Graphs
 
@@ -21,8 +22,14 @@
 - Monsters
 - High Score
 - Cycle Finding
+- Planet Queries II
 
 ## Trees
 
 - Tree Matching
 - Tree Distances 1
+- Company Queries 1
+
+## Strings
+
+- Word Combinations
